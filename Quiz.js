@@ -4,14 +4,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FormRange from 'react-bootstrap/FormRange';
 import FormCheck from 'react-bootstrap/FormCheck';
-import { Button } from 'react-bootstrap';
+import FormSelect from 'react-bootstrap/FormSelect';
+import Button from 'react-bootstrap/Button';
 
 export default class Quiz extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: [5, 5, 5, 5, 0],
-      enabled: [false, false, false, false, '']
+      answers: [5, 5, 5, 5, 'Yes'],
+      enabled: [false, false, false, false],
     };
 
     this.updateAnswers = this.updateAnswers.bind(this);
@@ -38,7 +39,7 @@ export default class Quiz extends React.Component {
   generateList() {
     let newAnswers = this.state.answers;
     this.state.enabled.forEach((a, ai) => {
-      if (a) newAnswers[ai] = -1;
+      if(a) newAnswers[ai] = -1;
     });
     //TODO: Add error check if all are excluded
 
@@ -77,6 +78,16 @@ export default class Quiz extends React.Component {
         <Container fluid>
           <Row className="justify-content-md-center">Select Mood</Row>
           {questionList}
+          <Row>
+            <Col>About Romance?</Col>
+            <Col>
+              <FormSelect onChange={(e) => this.updateAnswers(4, e.target.value)}>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Both</option>
+              </FormSelect>
+            </Col>
+          </Row>
           <Button onClick={() => this.generateList()}>Generate!</Button>
         </Container>
       </div>
