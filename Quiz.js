@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import FormRange from 'react-bootstrap/FormRange';
 import FormCheck from 'react-bootstrap/FormCheck';
 import FormSelect from 'react-bootstrap/FormSelect';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 export default class Quiz extends React.Component {
@@ -13,6 +14,7 @@ export default class Quiz extends React.Component {
     this.state = {
       answers: [5, 5, 5, 5, 'Yes'],
       enabled: [false, false, false, false],
+      duration: 30,
     };
 
     this.updateAnswers = this.updateAnswers.bind(this);
@@ -35,18 +37,24 @@ export default class Quiz extends React.Component {
       enabled: newEnabled,
     });
   }
+  
+  updateDuration(value) {
+    this.setState({
+      duration: value
+    });
+  }
 
   generateList() {
     let newAnswers = this.state.answers;
     this.state.enabled.forEach((a, ai) => {
-      if(a) newAnswers[ai] = -1;
+      if (a) newAnswers[ai] = -1;
     });
     //TODO: Add error check if all are excluded
 
     this.setState({
       answers: newAnswers,
     });
-    console.log(this.state.answers);
+    console.log(this.state.answers + "," + this.state.duration);
   }
 
   render() {
@@ -61,14 +69,14 @@ export default class Quiz extends React.Component {
             max={10}
             onChange={(e) => this.updateAnswers(a, parseInt(e.target.value))}
             disabled={this.state.enabled[a]}
-          ></FormRange>
+          />
         </Col>
         <Col>{rightTitle[a]}</Col>
         <Col>
           <FormCheck
             label="Exclude"
             onChange={() => this.updateRangesEnabled(a)}
-          ></FormCheck>
+          />
         </Col>
       </Row>
     ));
@@ -81,14 +89,32 @@ export default class Quiz extends React.Component {
           <Row>
             <Col>About Romance?</Col>
             <Col>
-              <FormSelect onChange={(e) => this.updateAnswers(4, e.target.value)}>
+              <FormSelect
+                onChange={(e) => this.updateAnswers(4, e.target.value)}
+              >
                 <option>Yes</option>
                 <option>No</option>
                 <option>Both</option>
               </FormSelect>
             </Col>
           </Row>
-          <Button onClick={() => this.generateList()}>Generate!</Button>
+          <Row>
+            <Col>Duration</Col>
+            <Col>
+              <FormSelect
+                onChange={(e) => this.updateDuration(e.target.value)}
+              >
+                <option value={30}>30 minutes</option>
+                <option value={60}>60 minutes</option>
+                <option value={90}>90 minutes</option>
+                <option value={120}>2 hours</option>
+                <option value={180}>3 hours</option>
+              </FormSelect>
+            </Col>
+          </Row>
+          <Row>
+            <Button onClick={() => this.generateList()}>Generate!</Button>
+          </Row>
         </Container>
       </div>
     );
